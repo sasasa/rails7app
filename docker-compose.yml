@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  rails:
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bin/dev"
+    volumes:
+      - .:/myapp
+      - public-data:/myapp/public
+    ports:
+      - "3000:3000"
+    environment:
+      - APP_ENV=development
+    tty: true
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0.27
+    environment:
+      TZ: Asia/Tokyo
+      MYSQL_ROOT_PASSWORD: pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - db:/var/lib/mysql
+
+volumes:
+  db:
+    driver: local
+  public-data:
